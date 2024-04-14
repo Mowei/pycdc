@@ -2448,7 +2448,44 @@ PycRef<ASTNode> BuildFromCode(PycRef<PycCode> code, PycModule* mod)
             variable_annotations = true;
             break;
         case Pyc::JUMP_IF_NOT_EXC_MATCH_A:
-        case Pyc::RERAISE_A:
+            {
+                PycRef<ASTNode>     name    = stack.top();
+                stack.pop();
+                stack.pop();
+
+                if ( name->type() == ASTNode::NODE_NAME && !blocks.empty() && blocks.top()->blktype() == ASTBlock::BLK_EXCEPT )
+                {
+                    PycRef<ASTBlock>    prev    = blocks.top();
+                    blocks.pop();
+                    PycRef<ASTBlock>    next    = new ASTCondBlock( prev->blktype(), prev->end(), name, prev.cast<ASTCondBlock>()->negative() );
+                    next->init();
+                    blocks.push( next );
+                    curblock    = blocks.top();
+                }
+            }
+            break;
+            case Pyc::RERAISE:
+                {
+                    // stack.pop();
+                    // stack.pop();
+                    // stack.pop();
+                    PycRef<ASTBlock>    prev    = blocks.top();
+                    /*
+                    * 并不完备，仅为示例
+                    */
+                    if
+                    (
+                        !blocks.empty() &&
+                        prev->nodes().size() &&
+                        prev->nodes().back().type() == ASTNode::NODE_BLOCK &&
+                        prev->nodes().back().cast<ASTBlock>()->blktype() == ASTBlock::BLK_EXCEPT
+                    )
+                    {
+                        blocks.pop();
+                        blocks.top()->append( prev.cast<ASTNode>() );
+                    }
+                }
+                break;
         case Pyc::PRECALL_A:
         case Pyc::RESUME_A:
         case Pyc::INSTRUMENTED_RESUME_A:
