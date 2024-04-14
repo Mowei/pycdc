@@ -2464,28 +2464,28 @@ PycRef<ASTNode> BuildFromCode(PycRef<PycCode> code, PycModule* mod)
                 }
             }
             break;
-            case Pyc::RERAISE:
+        case Pyc::RERAISE:
+            {
+                // stack.pop();
+                // stack.pop();
+                // stack.pop();
+                PycRef<ASTBlock>    prev    = blocks.top();
+                /*
+                * 并不完备，仅为示例
+                */
+                if
+                (
+                    !blocks.empty() &&
+                    prev->nodes().size() &&
+                    prev->nodes().back().type() == ASTNode::NODE_BLOCK &&
+                    prev->nodes().back().cast<ASTBlock>()->blktype() == ASTBlock::BLK_EXCEPT
+                )
                 {
-                    // stack.pop();
-                    // stack.pop();
-                    // stack.pop();
-                    PycRef<ASTBlock>    prev    = blocks.top();
-                    /*
-                    * 并不完备，仅为示例
-                    */
-                    if
-                    (
-                        !blocks.empty() &&
-                        prev->nodes().size() &&
-                        prev->nodes().back().type() == ASTNode::NODE_BLOCK &&
-                        prev->nodes().back().cast<ASTBlock>()->blktype() == ASTBlock::BLK_EXCEPT
-                    )
-                    {
-                        blocks.pop();
-                        blocks.top()->append( prev.cast<ASTNode>() );
-                    }
+                    blocks.pop();
+                    blocks.top()->append( prev.cast<ASTNode>() );
                 }
-                break;
+            }
+            break;
         case Pyc::PRECALL_A:
         case Pyc::RESUME_A:
         case Pyc::INSTRUMENTED_RESUME_A:
