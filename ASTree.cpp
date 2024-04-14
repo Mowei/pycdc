@@ -2464,7 +2464,7 @@ PycRef<ASTNode> BuildFromCode(PycRef<PycCode> code, PycModule* mod)
                 }
             }
             break;
-        case Pyc::RERAISE:
+        case Pyc::RERAISE_A:
             {
                 // stack.pop();
                 // stack.pop();
