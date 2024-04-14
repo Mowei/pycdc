@@ -159,7 +159,7 @@ PycRef<ASTNode> BuildFromCode(PycRef<PycCode> code, PycModule* mod)
             }
         }
 
-        fprintf(stderr, "Debug opcode: %s\n", Pyc::OpcodeName(opcode & 0xFF));
+        //fprintf(stderr, "Debug opcode: %s\n", Pyc::OpcodeName(opcode & 0xFF));
         switch (opcode) {
         case Pyc::BINARY_OP_A:
             {
