@@ -2446,6 +2446,8 @@ PycRef<ASTNode> BuildFromCode(PycRef<PycCode> code, PycModule* mod)
         case Pyc::SETUP_ANNOTATIONS:
             variable_annotations = true;
             break;
+        case Pyc::JUMP_IF_NOT_EXC_MATCH_A:
+        case Pyc::RERAISE_A:
         case Pyc::PRECALL_A:
         case Pyc::RESUME_A:
         case Pyc::INSTRUMENTED_RESUME_A:
@@ -2466,7 +2468,7 @@ PycRef<ASTNode> BuildFromCode(PycRef<PycCode> code, PycModule* mod)
         default:
             fprintf(stderr, "Unsupported opcode: %s\n", Pyc::OpcodeName(opcode & 0xFF));
             cleanBuild = false;
-            //return new ASTNodeList(defblock->nodes());
+            return new ASTNodeList(defblock->nodes());
         }
 
         else_pop =  ( (curblock->blktype() == ASTBlock::BLK_ELSE)
